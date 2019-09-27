@@ -1,0 +1,61 @@
+package com.ipartek.formacion.model.dao;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.ipartek.formacion.model.ConnectionManager;
+import com.ipartek.formacion.model.pojo.Categoria;
+
+public class CategoriaDAO {
+
+	private static CategoriaDAO INSTANCE = null;
+
+	private CategoriaDAO() {
+		super();
+	}
+
+	public static synchronized CategoriaDAO getInstance() {
+
+		if (INSTANCE == null) {
+			INSTANCE = new CategoriaDAO();
+		}
+
+		return INSTANCE;
+
+	}
+
+	public ArrayList<Categoria> getAll() {
+
+		ArrayList<Categoria> lista = new ArrayList<Categoria>();
+
+		String runSP = "{ call categoria_get_All() }";
+
+		try (Connection con = ConnectionManager.getConnection();
+				Statement statement = con.createStatement();
+				CallableStatement callableStatement = con.prepareCall(runSP)) {
+
+			ResultSet rs = callableStatement.executeQuery();
+
+			while (rs.next()) {
+				lista.add(mapper(rs));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+
+	private Categoria mapper(ResultSet rs) throws SQLException {
+		Categoria c = new Categoria();
+		c.setId(rs.getInt("id"));
+		c.setNombre(rs.getString("nombre"));
+		return c;
+	}
+
+}

@@ -1,0 +1,79 @@
+package com.ipartek.formacion.model.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.ipartek.formacion.model.ConnectionManager;
+import com.ipartek.formacion.model.pojo.Likes;
+import com.ipartek.formacion.model.pojo.Rol;
+import com.ipartek.formacion.model.pojo.Usuario;
+import com.ipartek.formacion.model.pojo.Video;
+
+public class LikesDAO {
+
+	private static LikesDAO INSTANCE = null;
+
+	private static final String SQL_INSERT = "INSERT INTO likes ( usuario_id, video_id ) VALUES ( ?, ? );";
+	private static final String SQL_LIKES_BY_USUARIO = "SELECT usuario_id, COUNT(*) 'total_likes' FROM likes WHERE usuario_id = ? GROUP BY usuario_id;";
+	
+	private LikesDAO() {
+		super();
+	}
+
+	public static synchronized LikesDAO getInstance() {
+
+		if (INSTANCE == null) {
+			INSTANCE = new LikesDAO();
+		}
+		return INSTANCE;
+
+	}
+
+	public boolean crear(int idUsuario, int idVideo) throws Exception {
+		
+		boolean resultado = false;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_INSERT)) {
+
+			pst.setInt(1, idUsuario);
+			pst.setInt(2, idVideo);
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resultado = true;
+			}
+		}
+
+		return resultado;
+	}
+	
+	public int getById(int id) {
+		int likes = 0;
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(SQL_LIKES_BY_USUARIO)) {
+
+			// sustituyo la 1º ? por la variable id
+			pst.setInt(1, id);
+
+			try (ResultSet rs = pst.executeQuery()) {
+				if (rs.next()) {
+					/*
+					 * Video v = new Video(); v.setId( rs.getInt("id") ); v.setNombre(
+					 * rs.getString("nombre")); v.setCodigo( rs.getString("codigo"));
+					 */
+					//likes = rs;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return likes;
+	}
+
+}

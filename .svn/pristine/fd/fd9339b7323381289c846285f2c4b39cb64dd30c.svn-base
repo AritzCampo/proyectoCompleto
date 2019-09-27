@@ -1,0 +1,59 @@
+<%@include file="includes/header.jsp"%>
+<%@include file="includes/navbar.jsp"%> 
+<%@include file="includes/mensaje.jsp"%>
+
+
+<h1>BIENVENIDO</h1>
+ 
+<div class="row">
+	<div class="col-8">
+		<h2>VÍDEOS CON MÁS LIKES</h2>
+		<ul class="list-group">
+			<c:forEach items="${videosInicial}" var="v" >	  
+				<li class="list-group-item">
+					<a href="login">
+						<img class="float-left mr-3" src="https://img.youtube.com/vi/${v.codigo}/default.jpg" alt="Imagen destacda del video ${v.nombre}"/>
+						<p class="h3">${v.nombre}</p>
+					</a>
+					<a href="login">	
+					<span><i class="fas fa-user mr-1"></i>${v.usuario.nombre}</span>
+					</a>				  			
+					<span><i class="fas fa-tag mr-1"></i>${v.categoria.nombre}</span>
+					<span><i class="fas fa-heart mr-1"></i>X Likes</span>						  		
+				</li>					
+			</c:forEach>
+		</ul>		
+	</div>
+	
+	<div class="col-4">
+		<h2>BUSCAR VÍDEO</h2>
+			<form action="public/inicio" method="post">
+				<div class="form-group">
+					<label for="buscador">¿Qué buscas?</label>
+					<input type="text" class="form-control" id="buscador" name="buscador" placeholder="Criterio de búsqueda">
+				</div>
+				<div class="form-group">
+					<label for="opcionBuscar">Buscar por:</label>
+					<select class="form-control" id="opcionBuscar" name="opcionBuscar">
+						<option value="1">Nombre</option>
+						<option value="2">Usuario</option>
+
+					</select>
+						
+					
+					
+					
+				</div>
+				<button type="submit" class="btn btn-primary btn-block">Submit</button>
+				<a class="btn btn-primary btn-block" href="public/inicio">Limpiar Formulario</a>
+			</form>
+	</div>	
+</div>
+
+<i class="fas fa-heart"></i>
+<i class="far fa-heart"></i>
+
+
+
+
+<%@include file="../includes/footer.jsp"%>
