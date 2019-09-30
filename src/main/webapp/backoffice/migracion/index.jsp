@@ -13,6 +13,8 @@
 	<h2>LINEAS LEIDAS ${leidas}</h2>
 	<h2>LINEAS INSERTADAS ${insertadas}</h2>
 	<h2>LINEAS ERRONEAS  ${error}</h2>
+	<h2>LINEAS tiempo  ${tiempo}</h2>
+	
 	
 	
 	
